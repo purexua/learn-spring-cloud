@@ -1,0 +1,34 @@
+server:
+  port: 9527
+
+spring:
+  application:
+    name: cloud-provider-gateway
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        prefer-ip-address: true
+        service-name: ${spring.application.name}
+    gateway:
+      default-filters: #全局过滤器
+        - AddResponseHeader=X-Request-global-filter, global
+      routes:
+        - id: pay_routh1
+          uri: lb://cloud-provider-payment
+          predicates: #参考 `https://docs.spring.io/spring-cloud-gateway/reference/spring-cloud-gateway-server-mvc/gateway-request-predicates.html`
+            - Path=/pay/gateway/get/**
+
+        - id: pay_routh2
+          uri: lb://cloud-provider-payment
+          predicates:
+            - Path=/pay/gateway/info/**
+
+        - id: pay_routh3
+          uri: lb://cloud-provider-payment
+          predicates:
+            - Path=/pay/gateway/filter/**
+          filters:
+            - AddRequestHeader=X-Request-gateway-filter1, gateway
+            - AddRequestHeader=X-Request-gateway-filter2, gateway

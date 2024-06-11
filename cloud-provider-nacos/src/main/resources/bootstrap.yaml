@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: cloud-provider-nacos
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+      config:
+        server-addr: localhost:8848
+        file-extension: yaml
+        group: PROD_GROUP
+        namespace: e577bbb1-6830-4ca9-aafb-8445726e4cf1
